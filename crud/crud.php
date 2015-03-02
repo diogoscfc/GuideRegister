@@ -54,6 +54,17 @@ function editarAluno($conexao, $dadosAluno) {
     }
 }
 
+function desativarAluno($conexao, $id) {
+    $sqlAtualizar = "UPDATE aluno SET "
+            . "ativo = 0 "
+            . "WHERE idAluno = ". $id;
+    if (mysqli_query($conexao, $sqlAtualizar)) {
+        
+    } else {
+        echo mysqli_error($conexao);
+    }
+}
+
 //--------------------Funções  PROFESSOR -------------------
 
 function inserirProfessor($conexao, $dados) {
@@ -74,8 +85,10 @@ function inserirProfessor($conexao, $dados) {
     unset($_POST);
 }
 
-function listarProfessorPorId($conexao, $dadosProfessor) {
-    $sqlBuscar = "SELECT * FROM usuarios WHERE idUsuario = {$dadosProfessor['idUsuario']}";
+function listarProfessorPorId($conexao, $id) {
+    $sqlBuscar = "SELECT * FROM usuarios WHERE idUsuario =" . $id;
+    $resultado = mysqli_query($conexao, $sqlBuscar);
+    return mysqli_fetch_assoc($resultado);
 }
 
 function listarProfessor($conexao, $dadosProfessor) {
@@ -86,6 +99,32 @@ function listarProfessor($conexao, $dadosProfessor) {
         $resProfessor[] = $registro;
     }
     return $resProfessor;
+}
+
+function editarProfessor($conexao, $dadosProfessor) {
+    $sqlAtualizar = "UPDATE usuarios SET "
+            . "nomeUsuario = '{$dadosProfessor['nomeUsuario']}', "
+            . "dtNascimento = '{$dadosProfessor['dtNascimento']}', "
+            . "rg = '{$dadosProfessor['rg']}', "
+            . "cpf = '{$dadosProfessor['cpf']}', "
+            . "dtAdmissao = '{$dadosProfessor['dtAdmissao']}'"
+            . "WHERE idUsuario = {$dadosProfessor['idUsuario']}";
+    if (mysqli_query($conexao, $sqlAtualizar)) {
+        
+    } else {
+        echo mysqli_error($conexao);
+    }
+}
+
+function desativarProfessor($conexao, $id) {
+    $sqlAtualizar = "UPDATE usuarios SET "
+            . "ativo = 0 "
+            . "WHERE idUsuario = ". $id;
+    if (mysqli_query($conexao, $sqlAtualizar)) {
+        
+    } else {
+        echo mysqli_error($conexao);
+    }
 }
 
 //--------------------Funções  TURMA -------------------
@@ -105,6 +144,43 @@ function listagemDeTurmas($conexao) {
     }
     return $resRelatorio;
 }
+
+//--------------------Funções  DISCIPLINAS -------------------
+
+function inserirDisciplina($conexao, $dados) {
+    $sqlInserir = "insert into disciplina ("
+            . "nomeDisciplina, "
+            . "codDisciplina, "
+            . "ch, "
+            . "idProfessor, "
+            . "nomeProfessor, "
+            . "idCurso, "
+            . "nomeCurso, "
+            . "idTurma, "
+            . "PAturma"
+            . ")"
+            . "VALUES('"
+            . "{$dados['nomeDisciplina']}','"
+            . "{$dados['codDisciplina']}','"
+            . "{$dados['ch']}','"
+            . "{$dados['idProfessor']}','"
+            . "{$dados['nomeProfessor']}','"
+            . "{$dados['idCurso']}','"
+            . "{$dados['nomeCurso']}','"
+            . "{$dados['idTurma']}','"
+            . "{$dados ['PAturma']}')";
+    if (mysqli_query($conexao, $sqlInserir)) {
+        echo 'fez a inserao';
+    }  else {
+        print_r(mysqli_error($conexao));    
+    }
+    
+    unset($_POST);
+}
+
+//--------------------Funções  CURSOS -------------------
+
+
 
 function listarAviso($conexao, $id) {
     $sqlBuscar = 'SELECT * FROM aviso WHERE id = ';
@@ -131,28 +207,6 @@ function editarAviso($conexao, $projeto) {
             . "WHERE idAviso ='{$projeto['idAviso']}
 
     , ";
-    mysqli_query($conexao, $sqlAtualizar
-    );
-}
-
-function editarProfessor($conexao, $projeto) {
-    $sqlAtualizar = "UPDATE Professor SET"
-            . "nome = '{$projeto['nome']},"
-            . "telefone = '{$projeto['telefone']}
-
-    , "
-            . "endereco  = '{$projeto['endereco']},"
-            . "rg ='{$projeto['rg']}
-
-    , "
-            . " 
-
-     cpf 
-
-      =  
-
-     '{$projeto['cpf']},"
-            . "WHERE idProfessor ='{$projeto['idProfessor']}, ";
     mysqli_query($conexao, $sqlAtualizar
     );
 }
